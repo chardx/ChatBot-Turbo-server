@@ -2,6 +2,7 @@ import express from "express";
 import { runScript } from "./app.js";
 import googleRoutes from "./routes/google.route.js";
 import stableDRoutes from "./routes/google.route.js";
+import firebaseRoutes from "./routes/firebase.route.js";
 
 import cors from "cors";
 const app = express();
@@ -10,6 +11,7 @@ app.use(cors());
 app.use(express.json());
 app.use("/api/google", googleRoutes);
 app.use("/api/stableD", stableDRoutes);
+app.use("/api/firebase", firebaseRoutes);
 
 app.get("/", async (req, res) => {
   res.write("<h1>Hello World!</h1>");

@@ -1,13 +1,11 @@
 import express from "express";
 import { OpenAI } from "langchain/llms/openai";
 import { initializeAgentExecutor } from "langchain/agents";
-import { SerpAPI } from "langchain/tools";
-import { Calculator } from "langchain/tools/calculator";
+import { DynamicTool } from "langchain/tools";
 import * as dotenv from "dotenv";
 dotenv.config();
 const router = express.Router();
-const API_URL = "https://api-inference.huggingface.co/models/CompVis/stable-diffusion-v1-4";
-const headers = { Authorization: `Bearer ${process.env.HUGGINGFACE_TOKEN}` };
+const API_URL = "https://api-inference.huggingface.co/models/runwayml/stable-diffusion-v1-5";
 router.route("/").get(async (req, res) => {
     res.write("<h1>Stable Diffusion Routes<h1>");
     res.send();
@@ -23,20 +21,13 @@ router.route("/").post(async (req, res) => {
     }
 });
 const runProcessImage = async (req) => {
-    //Instantiante the OpenAI model
-    //Pass the "temperature" parameter which controls the RANDOMNESS of the model's output. A lower temperature will result in more predictable output, while a higher temperature will result in more random output. The temperature parameter is set between 0 and 1, with 0 being the most predictable and 1 being the most random
     const model = new OpenAI({ temperature: 0 });
-    //Create a list of the instatiated tools
-    const tools = [new SerpAPI(), new Calculator()];
-    //Construct an agent from an LLM and a list of tools
-    //"zero-shot-react-description" tells the agent to use the ReAct framework to determine which tool to use. The ReAct framework determines which tool to use based solely on the tool’s description. Any number of tools can be provided. This agent requires that a description is provided for each tool.
+    const tools = [new StableDiffusionTool()];
     const executor = await initializeAgentExecutor(tools, model, "zero-shot-react-description");
-    console.log("Loaded agent.");
-    //Specify the prompt
-    console.log(req.body.prompt);
-    const { prompt: input } = req.body;
-    console.log("prompt:" + input);
+    console.log("Loaded agents.");
+    const input = "A Flying cat";
     console.log(input);
+    console.log(`Executing with input "${input}"...`);
     //Run the agent
     try {
         const result = await executor.call({ input });
@@ -49,4 +40,25 @@ const runProcessImage = async (req) => {
     }
 };
 export default router;
+class StableDiffusionTool extends DynamicTool {
+    constructor() {
+        super({
+            name: "StableDiffusion",
+            description: "A custom tool that uses the Stable Diffusion API.",
+            func: async (input) => {
+                // Your custom logic goes here
+                const response = await fetch(API_URL, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${process.env.HUGGINGFACE_TOKEN}`,
+                    },
+                    body: JSON.stringify({ input }),
+                });
+                const data = await response.json();
+                return data.output;
+            },
+        });
+    }
+}
 //# sourceMappingURL=stablediffusion.route.js.map

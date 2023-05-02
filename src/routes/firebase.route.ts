@@ -2,25 +2,29 @@ import express from "express";
 import { adminDb } from "../firebaseAdmin.js";
 
 const router = express.Router();
+
 router.route("/").get(async (req, res) => {
-  res.write("<h1>Welcome to Firebase Routes<h1>");
+  try {
+    const conversationRef = adminDb.collection("conversations");
+    const snapshot = await conversationRef.orderBy("dateCreated", "desc").get();
+    const conversations = [];
 
-  res.send();
-});
+    snapshot.forEach((doc) => {
+      const conversation = doc.data();
+      conversation.id = doc.id;
+      conversations.push(conversation);
+    });
 
-router.route("/add").get(async (req, res) => {
-  const convoRef = adminDb
-    .collection("conversations")
-    .doc("x8USB8hRqWGWbEBVUk85");
-  const doc = await convoRef.get();
-
-  if (!doc.exists) {
-    console.log("No such document!");
+    res.status(200).send(conversations);
+  } catch (error) {
+    console.log(error);
     return res.sendStatus(400);
   }
 
-  console.log("Document data:", doc.data());
-  res.status(200).send(doc.data());
+  // if (!doc.exists) {
+  //   console.log("No such document!");
+  //   return res.sendStatus(400);
+  // }
 });
 
 router.route("/add").post(async (req, res) => {
@@ -32,14 +36,12 @@ router.route("/add").post(async (req, res) => {
     imageUrl?: string;
   }
 
-  const convoInput: Conversation = req.body;
+  const convoInput = req.body.data;
 
   try {
-    const convoRef = adminDb
-      .collection("conversations")
-      .doc("7snqBsVwYqlcTyYNbaJe");
+    const convoRef = adminDb.collection("conversations").doc(convoInput.id);
     const doc = await convoRef.set(convoInput);
-
+    
     console.log("Document written");
     res.status(200).send("Document added Successfully!");
   } catch (error) {

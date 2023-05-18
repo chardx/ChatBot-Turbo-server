@@ -43,6 +43,7 @@ const runGenerateTitle = async (req: any) => {
     ),
   ]);
   console.log(response);
+
   return response;
 };
 

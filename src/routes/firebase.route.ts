@@ -41,7 +41,7 @@ router.route("/add").post(async (req, res) => {
   try {
     const convoRef = adminDb.collection("conversations").doc(convoInput.id);
     const doc = await convoRef.set(convoInput);
-    
+
     console.log("Document written");
     res.status(200).send("Document added Successfully!");
   } catch (error) {

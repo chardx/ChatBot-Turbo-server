@@ -34,6 +34,7 @@ const runProcessImage = async (req: any, input: string) => {
 
     const buffer = await response.arrayBuffer();
     const base64Image = Buffer.from(buffer).toString("base64");
+    console.log(`data:image/jpeg;base64,${base64Image}`);
     return `data:image/jpeg;base64,${base64Image}`;
   } catch (error) {
     console.log("error was called!");

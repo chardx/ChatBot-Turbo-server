@@ -1,9 +1,12 @@
 import express from "express";
 import fs from "fs";
+import { ChatOpenAI } from "langchain/chat_models/openai";
+import { HumanChatMessage, SystemChatMessage } from "langchain/schema";
 
 const router = express.Router();
 import { HfInference } from "@huggingface/inference";
-import { Url } from "url";
+
+const chat = new ChatOpenAI({ temperature: 0 });
 
 const hf = new HfInference(process.env.HUGGINGFACE_TOKEN);
 // const directoryPath = "./src/routest/test";
@@ -21,19 +24,8 @@ router.route("/").post(async (req, res) => {
 });
 
 const runDescribeImage = async (req: any, imageUrl: Blob | any) => {
-  //   console.log(imageUrl);
-  // 5. Fetch the image as a Blob
-
   const response = await fetch(imageUrl);
   const imageBlob = await response.blob();
-  console.log(imageBlob);
-
-  // const regex = /^data:image\/(.*?);base64,/;
-  // const match = imageUrl.match(regex);
-  // const imageFormat = match ? match[1] : "";
-  // const trimmedData = imageUrl.replace(regex, "");
-
-  // console.log(trimmedData);
 
   try {
     const results = await hf.imageToText({
@@ -41,8 +33,17 @@ const runDescribeImage = async (req: any, imageUrl: Blob | any) => {
       model: "nlpconnect/vit-gpt2-image-captioning",
     });
 
-    console.log(results);
-    return results;
+    console.log(results.generated_text);
+
+    const response = await chat.call([
+      new SystemChatMessage(`
+      Act like you're a bot that that explain a description of an image further but in full details but still stay with the context of the given description. No introduction and side comments. Just provide your observation.
+      `),
+      new HumanChatMessage(results.generated_text),
+    ]);
+
+    console.log(response);
+    return response;
   } catch (error) {
     console.log(error);
   }

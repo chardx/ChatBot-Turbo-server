@@ -1,5 +1,6 @@
 import express from "express";
 import { adminDb } from "../firebaseAdmin.js";
+import admin from "firebase-admin";
 
 const router = express.Router();
 
@@ -12,6 +13,9 @@ router.route("/").get(async (req, res) => {
     snapshot.forEach((doc) => {
       const conversation = doc.data();
       conversation.id = doc.id;
+
+      // Convert the "dateCreated" field to a Firestore Timestamp
+      conversation.dateCreated = new Date(conversation.dateCreated);
       conversations.push(conversation);
     });
 
@@ -29,18 +33,24 @@ router.route("/").get(async (req, res) => {
 
 router.route("/add").post(async (req, res) => {
   interface Conversation {
-    message: string;
-    sender: string;
-    sentTime: string;
-    isImage?: boolean;
-    imageUrl?: string;
+    id: string;
+    title: string;
+    dateCreated: string;
+    selectedAI: string;
+    userID: string;
+    messages: Object;
   }
 
-  const convoInput = req.body.data;
+  const convoInput: Conversation = req.body.data;
+  console.log(convoInput);
+  const conversation = {
+    ...convoInput,
+    dateCreated: new Date(convoInput.dateCreated), // Convert dateCreated to a JavaScript Date objectd
+  };
 
   try {
     const convoRef = adminDb.collection("conversations").doc(convoInput.id);
-    const doc = await convoRef.set(convoInput);
+    const doc = await convoRef.set(conversation);
 
     console.log("Document written");
     res.status(200).send("Document added Successfully!");
@@ -50,14 +60,21 @@ router.route("/add").post(async (req, res) => {
   }
 });
 
-router.route("/update").patch(async (req, res) => {
+router.route("/update/:id").patch(async (req, res) => {
   try {
-    const messageRef = req.body;
-    const updateRef = adminDb
-      .collection("conversations")
-      .doc("wlYuNIqL0kXHNkMIiXRp");
+    const conversationID = req.params.id;
+    const { filteredMessages } = req.body;
+    const updateRef = adminDb.collection("conversations").doc(conversationID);
 
-    updateRef.update(messageRef);
+    //Separate userMessage and gptMessage in 2 objects
+    const userMessage = filteredMessages[0];
+    const gptMessage = filteredMessages[1];
+
+    //Use arrayUnion to add the 2 objects to save on Firebase write cost
+    await updateRef.update({
+      messages: admin.firestore.FieldValue.arrayUnion(userMessage, gptMessage),
+    });
+    console.log("Document updated successfully");
     res.status(200).send("Document updated successfully");
   } catch (error) {
     console.error("Error updating document: ", error);

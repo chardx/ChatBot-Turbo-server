@@ -1,0 +1,1 @@
+One of the future updates of ChadGPT is to integrate Stripe for payments .

@@ -5,10 +5,11 @@ import stableDRoutes from "./routes/stablediffusion.route.js";
 import stableDummy from "./routes/stableD.route.js";
 import generateTitle from "./routes/chatTitle.route.js";
 import firebaseRoutes from "./routes/firebase.route.js";
-import documentLoaderRoutes from "./routes/document-loader/documentLoader.js";
+import documentLoaderRoutes from "./routes/document-loader/index.js";
 import huggingFaceRoutes from "./routes/huggingface.route.js";
 import describeImageRoutes from "./routes/describeimage.route.js";
 import fileUploaderRoutes from "./routes/file-uploader/index.js";
+import ttsPollyRoutes from "./routes/awspolly.route.js";
 
 import cors from "cors";
 const app = express();
@@ -24,6 +25,7 @@ app.use("/api/documentLoader", documentLoaderRoutes);
 app.use("/api/fileuploader", fileUploaderRoutes);
 app.use("/api/huggingface", huggingFaceRoutes);
 app.use("/api/describeImage", describeImageRoutes);
+app.use("/api/awspolly", ttsPollyRoutes);
 
 app.get("/", async (req, res) => {
   res.write("<h1>Hello World!</h1>");

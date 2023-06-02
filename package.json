@@ -29,6 +29,7 @@
     "dev": "nodemon --exec ts-node --esm ./src/index.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-polly": "^3.341.0",
     "@dqbd/tiktoken": "^1.0.7",
     "@huggingface/inference": "^1.8.0",
     "@types/node": "^18.15.11",

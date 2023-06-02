@@ -1,0 +1,1 @@
+ChadGPT is a Web application made in REact JS that can use OPEN AI, Whisper API for Speech to Text, Elevenlabs for text to Speech , DALL e for text to image and Hugging face inference for image to text.

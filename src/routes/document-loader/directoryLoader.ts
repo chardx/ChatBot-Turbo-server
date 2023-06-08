@@ -15,7 +15,7 @@ export const directoryLoader = async () => {
   const loader = new DirectoryLoader(directoryPath, {
     ".json": (path) => new JSONLoader(path),
     ".txt": (path) => {
-      console.log(`Loading TXT File ${path}`);
+      // console.log(`Loading TXT File ${path}`);
       return new TextLoader(path);
     },
     ".csv": (path) => new CSVLoader(path),

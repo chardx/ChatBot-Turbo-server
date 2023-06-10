@@ -7,10 +7,7 @@
     "outDir": "dist",
     "resolveJsonModule": true,
     "typeRoots": ["./typings"],
-    "skipLibCheck": true,
-    "paths": {
-      "cheerio": ["./node_modules/cheerio/lib/index.d.ts"]
-    }
+    "skipLibCheck": true
   },
   "include": ["src/**/*", "typings.d.ts"]
 }

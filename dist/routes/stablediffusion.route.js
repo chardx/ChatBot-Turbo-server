@@ -1,6 +1,6 @@
 import express from "express";
 import { OpenAI } from "langchain/llms/openai";
-import { initializeAgentExecutor } from "langchain/agents";
+import { initializeAgentExecutorWithOptions } from "langchain/agents";
 import { DynamicTool } from "langchain/tools";
 import * as dotenv from "dotenv";
 dotenv.config();
@@ -23,15 +23,20 @@ router.route("/").post(async (req, res) => {
 const runProcessImage = async (req) => {
     const model = new OpenAI({ temperature: 0 });
     const tools = [new StableDiffusionTool()];
-    const executor = await initializeAgentExecutor(tools, model, "zero-shot-react-description");
-    console.log("Loaded agents.");
-    const input = "A Flying cat";
+    const executor = await initializeAgentExecutorWithOptions(tools, model, {
+        agentType: "zero-shot-react-description",
+        verbose: true,
+    });
+    console.log("Loaded Stable diffusion agent.");
+    // const input = "Generate an image of A Flying car";
+    const { prompt: input } = req.body;
     console.log(input);
     console.log(`Executing with input "${input}"...`);
     //Run the agent
     try {
         const result = await executor.call({ input });
         console.log(`Got output ${result.output}`);
+        console.log(result);
         return result.output;
     }
     catch (error) {
@@ -44,19 +49,31 @@ class StableDiffusionTool extends DynamicTool {
     constructor() {
         super({
             name: "StableDiffusion",
-            description: "A custom tool that uses the Stable Diffusion API.",
+            description: "A custom tool that uses the Stable Diffusion API to generate images",
             func: async (input) => {
-                // Your custom logic goes here
-                const response = await fetch(API_URL, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${process.env.HUGGINGFACE_TOKEN}`,
-                    },
-                    body: JSON.stringify({ input }),
-                });
-                const data = await response.json();
-                return data.output;
+                console.log("input: " + input);
+                try {
+                    const response = await fetch(API_URL, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                            Authorization: `Bearer ${process.env.HUGGINGFACE_TOKEN}`,
+                        },
+                        body: JSON.stringify(input),
+                    });
+                    // const blob = await response.blob();
+                    // console.log(blob);
+                    // console.log("Hey I was executed");
+                    // console.log(URL.createObjectURL(blob));
+                    // return `${URL.createObjectURL(blob)}`;
+                    const buffer = await response.arrayBuffer();
+                    const base64Image = Buffer.from(buffer).toString("base64");
+                    return `data:image/jpeg;base64,${base64Image}`;
+                }
+                catch (error) {
+                    console.log("error was called!");
+                    console.log(error);
+                }
             },
         });
     }

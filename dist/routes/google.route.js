@@ -40,7 +40,7 @@ const runGoogleSearch = async (req) => {
         agentType: "zero-shot-react-description",
         verbose: true,
     });
-    console.log("Loaded agent.");
+    console.log("Loaded Google Route agent.");
     //Specify the prompt
     console.log(req.body.prompt);
     const { prompt: input } = req.body;

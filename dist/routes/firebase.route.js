@@ -1,17 +1,29 @@
 import express from "express";
 import { adminDb } from "../firebaseAdmin.js";
+import admin from "firebase-admin";
 const router = express.Router();
 router.route("/").get(async (req, res) => {
+    const { userID } = req.query;
     try {
         const conversationRef = adminDb.collection("conversations");
-        const snapshot = await conversationRef.orderBy("dateLastUpdated", "desc").get();
+        // const querySnapshot = await usersRef.where("googleId", "==", googleId).get();
+        const snapshot = await conversationRef
+            .where("userID", "==", userID)
+            .orderBy("dateLastUpdated", "desc")
+            .get();
         const conversations = [];
         snapshot.forEach((doc) => {
             const conversation = doc.data();
             conversation.id = doc.id;
+            // Convert the "dateCreated" field from Firestore Timestamp to Javascript date
+            conversation.dateCreated = conversation.dateCreated
+                .toDate()
+                .toLocaleString();
+            conversation.dateLastUpdated = conversation.dateLastUpdated
+                .toDate()
+                .toLocaleString();
             conversations.push(conversation);
         });
-        console.log("Document data:", conversations);
         res.status(200).send(conversations);
     }
     catch (error) {
@@ -25,9 +37,15 @@ router.route("/").get(async (req, res) => {
 });
 router.route("/add").post(async (req, res) => {
     const convoInput = req.body.data;
+    console.log(convoInput);
+    const conversation = {
+        ...convoInput,
+        dateCreated: new Date(convoInput.dateCreated),
+        dateLastUpdated: new Date(convoInput.dateLastUpdated), // Convert dateLastUpdated to Firestore Time stamp
+    };
     try {
         const convoRef = adminDb.collection("conversations").doc(convoInput.id);
-        const doc = await convoRef.set(convoInput);
+        const doc = await convoRef.set(conversation);
         console.log("Document written");
         res.status(200).send("Document added Successfully!");
     }
@@ -36,13 +54,20 @@ router.route("/add").post(async (req, res) => {
         res.status(500).send("Error saving the conversation");
     }
 });
-router.route("/update").patch(async (req, res) => {
+router.route("/update/:id").patch(async (req, res) => {
     try {
-        const messageRef = req.body;
-        const updateRef = adminDb
-            .collection("conversations")
-            .doc("wlYuNIqL0kXHNkMIiXRp");
-        updateRef.update(messageRef);
+        const conversationID = req.params.id;
+        const { filteredMessages } = req.body;
+        const updateRef = adminDb.collection("conversations").doc(conversationID);
+        //Separate userMessage and gptMessage in 2 objects
+        const userMessage = filteredMessages[0];
+        const gptMessage = filteredMessages[1];
+        //Use arrayUnion to add the 2 objects to save on Firebase write cost
+        await updateRef.update({
+            messages: admin.firestore.FieldValue.arrayUnion(userMessage, gptMessage),
+            dateLastUpdated: new Date(),
+        });
+        console.log("Document updated successfully");
         res.status(200).send("Document updated successfully");
     }
     catch (error) {

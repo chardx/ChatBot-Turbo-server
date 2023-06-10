@@ -22,7 +22,7 @@ import cors from "cors";
 const app = express();
 
 const corsOptions = {
-  origin: "http://localhost:5173",
+  origin: process.env.CLIENT_URL || "http://localhost:5173",
   methods: "GET,POST,PATCH,PUT,DELETE",
   allowedHeaders: [
     "Content-Type",
@@ -40,7 +40,10 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "http://localhost:5173");
+  res.header(
+    "Access-Control-Allow-Origin",
+    process.env.CLIENT_URL || "http://localhost:5173"
+  );
   res.header("Access-Control-Allow-Credentials", "true");
   res.header(
     "Access-Control-Allow-Headers",

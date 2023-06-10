@@ -5,17 +5,29 @@ import admin from "firebase-admin";
 const router = express.Router();
 
 router.route("/").get(async (req, res) => {
+  const { userID } = req.query;
+
   try {
     const conversationRef = adminDb.collection("conversations");
-    const snapshot = await conversationRef.orderBy("dateCreated", "desc").get();
+    // const querySnapshot = await usersRef.where("googleId", "==", googleId).get();
+
+    const snapshot = await conversationRef
+      .where("userID", "==", userID)
+      .orderBy("dateLastUpdated", "desc")
+      .get();
     const conversations = [];
 
     snapshot.forEach((doc) => {
       const conversation = doc.data();
       conversation.id = doc.id;
 
-      // Convert the "dateCreated" field to a Firestore Timestamp
-      conversation.dateCreated = new Date(conversation.dateCreated);
+      // Convert the "dateCreated" field from Firestore Timestamp to Javascript date
+      conversation.dateCreated = conversation.dateCreated
+        .toDate()
+        .toLocaleString();
+      conversation.dateLastUpdated = conversation.dateLastUpdated
+        .toDate()
+        .toLocaleString();
       conversations.push(conversation);
     });
 
@@ -36,6 +48,7 @@ router.route("/add").post(async (req, res) => {
     id: string;
     title: string;
     dateCreated: string;
+    dateLastUpdated: string;
     selectedAI: string;
     userID: string;
     messages: Object;
@@ -45,7 +58,8 @@ router.route("/add").post(async (req, res) => {
   console.log(convoInput);
   const conversation = {
     ...convoInput,
-    dateCreated: new Date(convoInput.dateCreated), // Convert dateCreated to a JavaScript Date objectd
+    dateCreated: new Date(convoInput.dateCreated), // Convert dateCreated to Firestore Time stamp
+    dateLastUpdated: new Date(convoInput.dateLastUpdated), // Convert dateLastUpdated to Firestore Time stamp
   };
 
   try {
@@ -73,6 +87,7 @@ router.route("/update/:id").patch(async (req, res) => {
     //Use arrayUnion to add the 2 objects to save on Firebase write cost
     await updateRef.update({
       messages: admin.firestore.FieldValue.arrayUnion(userMessage, gptMessage),
+      dateLastUpdated: new Date(),
     });
     console.log("Document updated successfully");
     res.status(200).send("Document updated successfully");

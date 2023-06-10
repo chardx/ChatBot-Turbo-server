@@ -4,7 +4,7 @@ const router = express.Router();
 router.route("/").get(async (req, res) => {
     try {
         const conversationRef = adminDb.collection("conversations");
-        const snapshot = await conversationRef.orderBy("dateCreated", "desc").get();
+        const snapshot = await conversationRef.orderBy("dateLastUpdated", "desc").get();
         const conversations = [];
         snapshot.forEach((doc) => {
             const conversation = doc.data();

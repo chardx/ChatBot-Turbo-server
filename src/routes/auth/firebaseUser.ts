@@ -9,11 +9,13 @@ export const authenticateFirebaseUser = async ({ profile, googleId }) => {
     //If User found, return the user
     console.log("User found:", foundUser);
     console.log("foundUser");
-    console.log(foundUser.googleId);
+    console.log(foundUser);
     return {
-      id: foundUser.googleId,
-      user: foundUser.displayName,
-      picture: foundUser.profilePicture,
+      userID: foundUser.userID,
+      googleId: foundUser.data.googleId,
+      user: foundUser.data.displayName,
+      picture: foundUser.data.profilePicture,
+      email: foundUser.data.email,
     };
   } else {
     //If User not found, Register the user in Firestore
@@ -27,9 +29,11 @@ export const authenticateFirebaseUser = async ({ profile, googleId }) => {
       });
 
       return {
-        id: googleId,
+        userID: userRef.id,
+        googleId,
         user: profile.displayName,
         picture: profile.photos[0].value,
+        email: profile.emails[0].value,
       };
     } catch (error) {
       console.log(error);
@@ -47,6 +51,7 @@ const findUserByGoogleId = async (googleId) => {
   } else {
     // User found, return the first matching document
     const userDoc = querySnapshot.docs[0];
-    return userDoc.data();
+    const userID = userDoc.id;
+    return { userID, data: userDoc.data() };
   }
 };

@@ -3,15 +3,14 @@ import passport from "passport";
 import { authenticateFirebaseUser } from "./routes/auth/firebaseUser.js";
 
 const authUser = async (req, accessToken, refreshToken, profile, done) => {
-  // const userProfile = await authenticateFirebaseUser({
-  //   profile,
-  //   googleId: profile.id,
-  // });
-  // console.log("User Profile:");
+  const userProfile = await authenticateFirebaseUser({
+    profile,
+    googleId: profile.id,
+  });
+  console.log("User Profile:");
   // console.log(userProfile);
-  // return done(null, userProfile);
-  console.log(profile)
-  return done(null, profile);
+  return done(null, userProfile);
+
 };
 
 passport.use(
@@ -23,16 +22,17 @@ passport.use(
       scope: ["profile", "email"],
       passReqToCallback: true,
     },
-    function (req, accessToken, refreshToken, profile, done) {
-      console.log(profile)
-      done(null, profile);
-    }
+    authUser,
+    // function (req, accessToken, refreshToken, profile, done) {
+    //   console.log(profile)
+    //   done(null, profile);
+    // }
   )
 );
 
 passport.serializeUser((user, done) => {
   console.log("Serializing User")
-  console.log(user)
+  // console.log(user)
   done(null, user);
 });
 

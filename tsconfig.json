@@ -6,7 +6,10 @@
     "sourceMap": true,
     "outDir": "dist",
     "resolveJsonModule": true,
-    "typeRoots": ["./typings"]
+    "typeRoots": ["./typings"],
+    "paths": {
+      "cheerio": ["./node_modules/cheerio/lib/index.d.ts"]
+    }
   },
   "include": ["src/**/*", "typings.d.ts"]
 }

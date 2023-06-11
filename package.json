@@ -25,7 +25,7 @@
   "contributors": [],
   "scripts": {
     "start": "node ./dist/index.js",
-    "dev": "node --exec ts-node --esm ./src/index.ts"
+    "dev": "nodemon --exec ts-node --esm ./src/index.ts"
   },
   "dependencies": {
     "@aws-sdk/client-polly": "^3.341.0",

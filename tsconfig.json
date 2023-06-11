@@ -9,5 +9,5 @@
     "typeRoots": ["./typings"],
     "skipLibCheck": true
   },
-  "include": ["src/**/*", "./api/*.ts", "typings.d.ts"]
+  "include": ["src/**/*", "typings.d.ts"]
 }

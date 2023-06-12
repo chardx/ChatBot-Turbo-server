@@ -59,7 +59,7 @@ app.use(
     keys: process.env.COOKIE_SESSION_SECRET.split(","),
     maxAge: 24 * 60 * 60 * 1000,
     cookie: {
-      sameSite: "lax",
+      sameSite: "none",
       secure: true, // Set to true if your application is served over HTTPS
     },
   })

@@ -16,13 +16,13 @@ router.route("/").get(async (req, res) => {
 
 const isLoggedIn = (req, res, next) => {
   console.log(req.logout);
-  console.log(req.session);
+  console.log(req.session.passport.user);
   console.log("I got called");
   console.log(req.cookies);
   console.log("Req.sessionID");
   console.log(req.sessionID);
-  console.log("Req.user");
-  console.log(req.user);
+  console.log("Req.session.user");
+  console.log(req.session.user);
   if (req.user) {
     next();
   } else {
@@ -33,7 +33,7 @@ const isLoggedIn = (req, res, next) => {
   }
 };
 
-router.route("/login/success").post(function (req: any, res) {
+router.route("/login/success").post(isLoggedIn, function (req: any, res) {
   console.log("Authorizing login...");
   console.log(req.user);
   if (req.user) {

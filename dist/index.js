@@ -43,6 +43,11 @@ app.use(cookieSession({
     name: "session",
     keys: ["cyberwolve"],
     maxAge: 24 * 60 * 60 * 100,
+    cookie: {
+        sameSite: 'lax',
+        secure: process.env.NODE_ENV === "production", // Set to true if your application is served over HTTPS
+
+    },
 }));
 // app.set("trust proxy", 1);
 // app.use(
@@ -69,18 +74,18 @@ app.use("/api/awspolly", ttsPollyRoutes);
 //console.log() values of "req.session" and "req.user" so we can see what is happening during Google Authentication
 // let count = 1;
 // const showlogs = (req, res, next) => {
-//   console.log("\n==============================");
-//   console.log(`------------>  ${count++}`);
-//   console.log(`\n req.session.passport -------> `);
-//   console.log(req.session.passport);
-//   console.log(`\n req.user -------> `);
-//   console.log(req.user);
-//   console.log("\n Session and Cookie");
-//   console.log(`req.session.id -------> ${req.session.id}`);
-//   console.log(`req.session.cookie -------> `);
-//   console.log(req.session.cookie);
-//   console.log("===========================================\n");
-//   next();
+//     console.log("\n==============================");
+//     console.log(`------------>  ${count++}`);
+//     console.log(`\n req.session.passport -------> `);
+//     console.log(req.session.passport);
+//     console.log(`\n req.user -------> `);
+//     console.log(req.user);
+//     console.log("\n Session and Cookie");
+//     console.log(`req.session.id -------> ${req.session.id}`);
+//     console.log(`req.session.cookie -------> `);
+//     console.log(req.session.cookie);
+//     console.log("===========================================\n");
+//     next();
 // };
 // app.use(showlogs);
 //Google Auth

@@ -10,7 +10,6 @@ const authUser = async (req, accessToken, refreshToken, profile, done) => {
   console.log("User Profile:");
   // console.log(userProfile);
   return done(null, userProfile);
-
 };
 
 passport.use(
@@ -22,7 +21,7 @@ passport.use(
       scope: ["profile", "email"],
       passReqToCallback: true,
     },
-    authUser,
+    authUser
     // function (req, accessToken, refreshToken, profile, done) {
     //   console.log(profile)
     //   done(null, profile);
@@ -31,8 +30,8 @@ passport.use(
 );
 
 passport.serializeUser((user, done) => {
-  console.log("Serializing User")
-  // console.log(user)
+  console.log("\n--------> Serializing User");
+  console.log(user);
   done(null, user);
 });
 

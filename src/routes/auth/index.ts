@@ -17,7 +17,7 @@ router.route("/").get(async (req, res) => {
 const isLoggedIn = (req, res, next) => {
   console.log("Checking if logged in...");
   console.log(req.logout);
-  console.log(req.session.passport.user);
+  console.log(req.session);
   // console.log("I got called");
   // console.log(req.cookies);
   // console.log("Req.sessionID");

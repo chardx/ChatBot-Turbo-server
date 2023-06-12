@@ -28,14 +28,15 @@ const isLoggedIn = (req, res, next) => {
   } else {
     res.status(401).json({
       error: true,
-      message: "Not Authenticated",
+      message: "Not yet Authenticated",
     });
   }
 };
 
 router.route("/login/success").post(function (req: any, res) {
-  console.log("Login Success");
   if (req.user) {
+    console.log("Login Success");
+    console.log(req.user);
     res.status(200).json({
       error: false,
       message: "Successfully Loged In",

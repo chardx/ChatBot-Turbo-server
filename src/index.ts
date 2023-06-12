@@ -55,8 +55,8 @@ app.use(function (req, res, next) {
 app.use(
   cookieSession({
     name: "session",
-    keys: ["cyberwolve"],
-    maxAge: 24 * 60 * 60 * 100,
+    keys: process.env.COOKIE_SESSION_SECRET.split(","),
+    maxAge: 24 * 60 * 60 * 1000,
   })
 );
 

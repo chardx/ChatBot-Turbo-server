@@ -60,7 +60,7 @@ app.use(
     maxAge: 24 * 60 * 60 * 1000,
     cookie: {
       sameSite: "lax",
-      secure: process.env.NODE_ENV === "production", // Set to true if your application is served over HTTPS
+      secure: true, // Set to true if your application is served over HTTPS
     },
   })
 );

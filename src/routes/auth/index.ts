@@ -33,7 +33,7 @@ const isLoggedIn = (req, res, next) => {
   }
 };
 
-router.route("/login/success").post(function (req, res) {
+router.route("/login/success").post(function (req: any, res) {
   console.log("Authorizing login...");
   console.log(req.user);
   if (req.user) {

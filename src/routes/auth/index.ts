@@ -15,14 +15,15 @@ router.route("/").get(async (req, res) => {
 });
 
 const isLoggedIn = (req, res, next) => {
+  console.log("Checking if logged in...");
   console.log(req.logout);
   console.log(req.session.passport.user);
-  console.log("I got called");
-  console.log(req.cookies);
-  console.log("Req.sessionID");
-  console.log(req.sessionID);
-  console.log("Req.session.user");
-  console.log(req.session.user);
+  // console.log("I got called");
+  // console.log(req.cookies);
+  // console.log("Req.sessionID");
+  // console.log(req.sessionID);
+  // console.log("Req.session.user");
+  // console.log(req.session.user);
   if (req.user) {
     next();
   } else {

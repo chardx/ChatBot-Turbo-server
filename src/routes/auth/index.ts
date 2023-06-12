@@ -34,6 +34,8 @@ const isLoggedIn = (req, res, next) => {
 };
 
 router.route("/login/success").post(function (req: any, res) {
+  console.log("Authorizing login...");
+  console.log(req.user);
   if (req.user) {
     console.log("Login Success");
     console.log(req.user);

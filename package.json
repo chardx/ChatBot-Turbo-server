@@ -24,7 +24,7 @@
   },
   "contributors": [],
   "scripts": {
-    "build": "npx tsc",
+    "build": "tsc",
     "start": "nodemon ./dist/index.js",
     "dev": "nodemon --exec ts-node --esm ./src/index.ts"
   },

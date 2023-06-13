@@ -55,7 +55,7 @@ app.set("trust proxy", 1); // trust first proxy
 
 app.use(
   cookieSession({
-    name: "session",
+    name: "ChatBotTurboSession",
     keys: process.env.COOKIE_SESSION_SECRET.split(","),
     maxAge: 24 * 60 * 60 * 1000,
     cookie: {

@@ -76,14 +76,22 @@ router
   .get(passport.authenticate("google", { scope: ["profile", "email"] }));
 
 router.route("/google/callback").get(
-  passport.authenticate("google", { failureRedirect: "/login/failed" }),
-
+  passport.authenticate("google", {
+    failureRedirect: "/login/failed",
+  }),
   function (req: any, res) {
-    // successRedirect: process.env.CLIENT_URL,
-    req.session.save(function () {
-      res.redirect("/");
-    });
+    console.log("Google Callback");
+    console.log(req.user);
+    res.redirect(process.env.CLIENT_URL);
   }
+
+  // function (req: any, res) {
+  //   console.log(req);
+  //   //
+  //   req.session.save(function () {
+  //     res.redirect("/");
+  //   });
+  // }
 );
 
 router.route("/login/failed").get((req, res) => {

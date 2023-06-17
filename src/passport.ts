@@ -30,7 +30,7 @@ passport.use(
 );
 
 passport.serializeUser((user, done) => {
-  console.log("\n--------> Serializing User");
+  console.log(`${new Date()}\n--------> Serializing User`);
   console.log(user);
   done(null, user);
 });

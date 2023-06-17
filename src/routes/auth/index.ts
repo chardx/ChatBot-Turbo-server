@@ -76,10 +76,14 @@ router
   .get(passport.authenticate("google", { scope: ["profile", "email"] }));
 
 router.route("/google/callback").get(
-  passport.authenticate("google", {
-    successRedirect: process.env.CLIENT_URL,
-    failureRedirect: "/login/failed",
-  })
+  passport.authenticate("google", { failureRedirect: "/login/failed" }),
+
+  function (req: any, res) {
+    // successRedirect: process.env.CLIENT_URL,
+    req.session.save(function () {
+      res.redirect("/");
+    });
+  }
 );
 
 router.route("/login/failed").get((req, res) => {

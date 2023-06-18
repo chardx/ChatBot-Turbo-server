@@ -22,7 +22,7 @@ import cors from "cors";
 const app = express();
 
 const corsOptions = {
-  origin: "*",
+  origin: process.env.CLIENT_URL || "http://localhost:5173",
   methods: "GET,POST,PATCH,PUT,DELETE",
   allowedHeaders: [
     "Content-Type",
@@ -39,18 +39,18 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-app.use(function (req, res, next) {
-  res.header(
-    "Access-Control-Allow-Origin",
-    process.env.CLIENT_URL || "http://localhost:5173"
-  );
-  res.header("Access-Control-Allow-Credentials", "true");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Origin, X-Requested-With, Content-Type, Accept"
-  );
-  next();
-});
+// app.use(function (req, res, next) {
+//   res.header(
+//     "Access-Control-Allow-Origin",
+//     process.env.CLIENT_URL || "http://localhost:5173"
+//   );
+//   res.header("Access-Control-Allow-Credentials", "true");
+//   res.header(
+//     "Access-Control-Allow-Headers",
+//     "Origin, X-Requested-With, Content-Type, Accept"
+//   );
+//   next();
+// });
 
 app.set("trust proxy", 1); // trust first proxy
 

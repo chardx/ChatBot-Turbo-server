@@ -79,7 +79,7 @@ app.use(
     cookie: {
       secure: process.env.NODE_ENV === "production",
       httpOnly: false,
-      domain: process.env.NODE_ENV === "production" ? "vercel.app" : "",
+      domain: process.env.NODE_ENV === "production" ? "onrender.com" : "",
     },
   })
 );

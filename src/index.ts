@@ -76,7 +76,11 @@ app.use(
     secret: "ChaD Software Development",
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: process.env.NODE_ENV === "production", httpOnly: false },
+    cookie: {
+      secure: process.env.NODE_ENV === "production",
+      httpOnly: false,
+      domain: process.env.NODE_ENV === "production" ? "vercel.app" : "",
+    },
   })
 );
 

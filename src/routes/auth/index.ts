@@ -18,7 +18,7 @@ const isLoggedIn = (req, res, next) => {
   console.log("Checking if logged in...");
   console.log(req.login);
   console.log("body");
-  console.log(req.body);
+  console.log(req.headers.cookie);
 
   console.log(req.session);
   console.log("Req.user");

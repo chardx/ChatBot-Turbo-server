@@ -33,9 +33,9 @@ const corsOptions = {
     "x-client-token",
     "x-client-secret",
     "Authorization",
+    "Set-Cookie",
   ],
   credentials: true,
-  exposedHeaders: ["Set-Cookie"],
 };
 
 app.use(cors(corsOptions));

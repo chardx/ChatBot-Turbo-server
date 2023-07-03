@@ -26,7 +26,7 @@ const isLoggedIn = (req, res, next) => {
   // console.log(req.sessionID);
   // console.log("Req.session.user");
   // console.log(req.session.user);
-  if (req.user) {
+  if (req.session) {
     next();
   } else {
     res.status(401).json({

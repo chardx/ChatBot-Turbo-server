@@ -64,6 +64,7 @@ app.use(
     keys: process.env.COOKIE_SESSION_SECRET.split(","),
     maxAge: 24 * 60 * 60 * 1000,
     cookie: {
+      secure: process.env.NODE_ENV === "production",
       sameSite: "none",
       httpOnly: true,
     },

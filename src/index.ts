@@ -78,7 +78,7 @@ app.use(
     saveUninitialized: false,
     cookie: {
       secure: process.env.NODE_ENV === "production",
-      httpOnly: false,
+      httpOnly: true,
       domain: process.env.NODE_ENV === "production" ? "onrender.com" : "",
     },
   })

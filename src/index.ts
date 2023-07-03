@@ -15,7 +15,7 @@ import authenticationRoutes from "./routes/auth/index.js";
 //Google Auth
 import passport from "passport";
 import cookieSession from "cookie-session";
-
+import session from "express-session";
 import "./passport.js";
 
 import cors from "cors";
@@ -57,28 +57,28 @@ if (process.env.NODE_ENV === "production") {
 }
 // app.set("trust proxy", 1); // trust first proxy
 
-app.use(
-  cookieSession({
-    name: "ChatBotTurboSession",
-    keys: process.env.COOKIE_SESSION_SECRET.split(","),
-    maxAge: 24 * 60 * 60 * 1000,
-    cookie: {
-      sameSite: "none",
-      domain: process.env.NODE_ENV === "production" ? "onrender.com" : "",
-      httpOnly: false,
-    },
-  })
-);
-
-// app.set("trust proxy", 1);
 // app.use(
-//   session({
-//     secret: "ChaD Software Development",
-//     resave: false,
-//     saveUninitialized: false,
-//     secure: process.env.NODE_ENV === "production",
+//   cookieSession({
+//     name: "ChatBotTurboSession",
+//     keys: process.env.COOKIE_SESSION_SECRET.split(","),
+//     maxAge: 24 * 60 * 60 * 1000,
+//     cookie: {
+//       sameSite: "none",
+//       domain: process.env.NODE_ENV === "production" ? "onrender.com" : "",
+//       httpOnly: false,
+//     },
 //   })
 // );
+
+app.set("trust proxy", 1);
+app.use(
+  session({
+    secret: "ChaD Software Development",
+    resave: false,
+    saveUninitialized: false,
+    secure: process.env.NODE_ENV === "production",
+  })
+);
 
 app.use(passport.initialize());
 app.use(passport.session());

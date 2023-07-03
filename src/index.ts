@@ -76,7 +76,7 @@ app.use(
     secret: "ChaD Software Development",
     resave: false,
     saveUninitialized: false,
-    secure: process.env.NODE_ENV === "production",
+    cookie: { secure: process.env.NODE_ENV === "production" },
     httpOnly: false,
   })
 );

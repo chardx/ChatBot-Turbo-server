@@ -77,6 +77,7 @@ app.use(
     resave: false,
     saveUninitialized: false,
     secure: process.env.NODE_ENV === "production",
+    httpOnly: false,
   })
 );
 

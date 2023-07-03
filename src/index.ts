@@ -57,32 +57,32 @@ if (process.env.NODE_ENV === "production") {
 }
 // app.set("trust proxy", 1); // trust first proxy
 
-// app.use(
-//   cookieSession({
-//     name: "ChatBotTurboSession",
-//     keys: process.env.COOKIE_SESSION_SECRET.split(","),
-//     maxAge: 24 * 60 * 60 * 1000,
-//     cookie: {
-//       sameSite: "none",
-//       domain: process.env.NODE_ENV === "production" ? "onrender.com" : "",
-//       httpOnly: false,
-//     },
-//   })
-// );
-
-app.set("trust proxy", 1);
 app.use(
-  session({
-    secret: "ChaD Software Development",
-    resave: false,
-    saveUninitialized: false,
+  cookieSession({
+    name: "ChatBotTurboSession",
+    keys: process.env.COOKIE_SESSION_SECRET.split(","),
+    maxAge: 24 * 60 * 60 * 1000,
     cookie: {
-      secure: process.env.NODE_ENV === "production",
-      httpOnly: true,
+      sameSite: "none",
       domain: process.env.NODE_ENV === "production" ? "onrender.com" : "",
+      httpOnly: false,
     },
   })
 );
+
+// app.set("trust proxy", 1);
+// app.use(
+//   session({
+//     secret: "ChaD Software Development",
+//     resave: false,
+//     saveUninitialized: false,
+//     cookie: {
+//       secure: process.env.NODE_ENV === "production",
+//       httpOnly: true,
+//       domain: process.env.NODE_ENV === "production" ? "onrender.com" : "",
+//     },
+//   })
+// );
 
 app.use(passport.initialize());
 app.use(passport.session());

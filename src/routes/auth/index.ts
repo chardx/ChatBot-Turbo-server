@@ -16,7 +16,10 @@ router.route("/").get(async (req, res) => {
 
 const isLoggedIn = (req, res, next) => {
   console.log("Checking if logged in...");
-  console.log(req.logout);
+  console.log(req.login);
+  console.log("body");
+  console.log(req.body);
+
   console.log(req.session);
   console.log("Req.user");
   console.log(req.user);
@@ -26,7 +29,7 @@ const isLoggedIn = (req, res, next) => {
   // console.log(req.sessionID);
   // console.log("Req.session.user");
   // console.log(req.session.user);
-  if (req.session) {
+  if (req.user) {
     next();
   } else {
     res.status(401).json({

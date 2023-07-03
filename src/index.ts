@@ -65,7 +65,7 @@ app.use(
     maxAge: 24 * 60 * 60 * 1000,
     cookie: {
       sameSite: "none",
-      domain: process.env.NODE_ENV === "production" ? "onrender.com" : "",
+      domain: process.env.NODE_ENV === "production" ? ".onrender.com" : "",
       httpOnly: false,
     },
   })

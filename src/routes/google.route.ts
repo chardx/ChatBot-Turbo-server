@@ -41,7 +41,7 @@ const runGoogleSearch = async (req: any) => {
     new WebBrowser({ model, embeddings }),
   ];
 
-  //Construct an agent from an LLM and a list of tools
+  //Construct an agent from an LL69520M and a list of tools
   //"zero-shot-react-description" tells the agent to use the ReAct framework to determine which tool to use. The ReAct framework determines which tool to use based solely on the tool’s description. Any number of tools can be provided. This agent requires that a description is provided for each tool.
   const executor = await initializeAgentExecutorWithOptions(tools, model, {
     agentType: "zero-shot-react-description",

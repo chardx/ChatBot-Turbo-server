@@ -2,6 +2,7 @@ import express from "express";
 import * as dotenv from "dotenv";
 import passport from "passport";
 import { truncateSync } from "fs";
+import jwt from "jsonwebtoken";
 
 dotenv.config();
 const router = express.Router();
@@ -14,65 +15,71 @@ router.route("/").get(async (req, res) => {
   res.send();
 });
 
+const verifyToken = (token) => {
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    // If the token is valid, the decoded object will contain the payload
+    return decoded;
+  } catch (err) {
+    // If the token is invalid or has expired, an error will be thrown
+    console.error("Invalid token:", err);
+    return null;
+  }
+};
+
 const isLoggedIn = (req, res, next) => {
   console.log("Checking if logged in...");
-  console.log(req.login);
-  console.log("body");
-  console.log(req.headers.cookie);
 
-  console.log(req.session);
-  console.log("Req.user");
-  console.log(req.user);
-  // console.log("I got called");
-  // console.log(req.cookies);
-  // console.log("Req.sessionID");
-  // console.log(req.sessionID);
-  // console.log("Req.session.user");
-  // console.log(req.session.user);
-  if (req.user) {
-    next();
-  } else {
+  console.log("bearer");
+  console.log(req.headers.authorization);
+  if (!req.headers.authorization) {
+    console.log("Failed authentication");
     res.status(401).json({
       error: true,
-      message: "Not yet Authenticated",
+      message: "Failed Authentication",
+    });
+    return;
+  }
+
+  //Remove prefix Bearer before passing the token
+  const authorizationHeader = req.headers.authorization;
+  let token;
+  if (authorizationHeader && authorizationHeader.startsWith("Bearer ")) {
+    token = authorizationHeader.split(" ")[1]; // Extract token without "Bearer " prefix
+  } else {
+    // Handle the case when the token is directly provided without the "Bearer " prefix
+    token = authorizationHeader;
+  }
+
+  const decodedToken: any = verifyToken(token);
+  if (decodedToken) {
+    // Token is valid, access the decoded payload
+    req.decodedToken = decodedToken;
+    console.log("User ID:", decodedToken.userID);
+    console.log("Google ID:", decodedToken.googleId);
+    console.log("User :", decodedToken.user);
+    console.log("Email:", decodedToken.email);
+    next();
+  } else {
+    // Token is invalid
+    res.status(401).json({
+      error: true,
+      message: "Invalid Token",
     });
   }
 };
 
 router.route("/login/success").post(isLoggedIn, function (req: any, res) {
   console.log("Authorizing login...");
-  console.log(req.user);
-  if (req.user) {
-    console.log("Login Success");
-    console.log(req.user);
-    res.status(200).json({
-      error: false,
-      message: "Successfully Loged In",
-      user: req.user,
-    });
-  } else {
-    res.status(403).json({ error: true, message: "Not Authorized" });
-  }
+  console.log(req.decodedToken);
+  console.log("Login Success");
+
+  res.status(200).json({
+    error: false,
+    message: "Successfully Loged In",
+    user: req.decodedToken,
+  });
 });
-
-// router.route("/google/callback").get(function (req, res, next) {
-//   passport.authenticate("google", function (err, user, info) {
-//     if (err) {
-//       return next(err);
-//     }
-//     if (!user) {
-//       return res.redirect(process.env.CLIENT_URL);
-//     }
-
-//     // Call req.login() inside the authentication callback
-//     req.login(user, function (err) {
-//       if (err) {
-//         return next(err);
-//       }
-//       return res.redirect(process.env.CLIENT_URL);
-//     });
-//   })(req, res, next);
-// });
 
 router
   .route("/google")
@@ -85,16 +92,13 @@ router.route("/google/callback").get(
   function (req: any, res) {
     console.log("Google Callback");
     console.log(req.user);
+    res.cookie("jwtToken", req.user.token, {
+      httpOnly: false,
+      secure: true,
+      sameSite: "strict",
+    });
     res.redirect(process.env.CLIENT_URL);
   }
-
-  // function (req: any, res) {
-  //   console.log(req);
-  //   //
-  //   req.session.save(function () {
-  //     res.redirect("/");
-  //   });
-  // }
 );
 
 router.route("/login/failed").get((req, res) => {

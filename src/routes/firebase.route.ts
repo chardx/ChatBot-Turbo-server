@@ -14,6 +14,7 @@ router.route("/").get(async (req, res) => {
     const snapshot = await conversationRef
       .where("userID", "==", userID)
       .orderBy("dateLastUpdated", "desc")
+      .limit(10)
       .get();
     const conversations = [];
 

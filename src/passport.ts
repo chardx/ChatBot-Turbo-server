@@ -1,6 +1,7 @@
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 import passport from "passport";
 import { authenticateFirebaseUser } from "./routes/auth/firebaseUser.js";
+import jwt from "jsonwebtoken";
 
 const authUser = async (req, accessToken, refreshToken, profile, done) => {
   const userProfile = await authenticateFirebaseUser({
@@ -9,7 +10,25 @@ const authUser = async (req, accessToken, refreshToken, profile, done) => {
   });
   console.log("User Profile:");
   // console.log(userProfile);
-  return done(null, userProfile);
+
+  //JWT implementation
+  const jwtPayload = {
+    userID: userProfile.userID,
+    googleId: userProfile.googleId,
+    user: userProfile.user,
+    picture: userProfile.picture,
+    email: userProfile.email,
+  };
+
+  const token = jwt.sign(jwtPayload, process.env.JWT_SECRET, {
+    expiresIn: "1h",
+  });
+  console.log("User Profile and token");
+  console.log(userProfile);
+  console.log(token);
+  // Set the token as an HTTP-only cookie
+
+  return done(null, { userProfile, token });
 };
 
 passport.use(
@@ -22,10 +41,6 @@ passport.use(
       passReqToCallback: true,
     },
     authUser
-    // function (req, accessToken, refreshToken, profile, done) {
-    //   console.log(profile)
-    //   done(null, profile);
-    // }
   )
 );
 

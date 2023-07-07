@@ -95,7 +95,7 @@ router.route("/google/callback").get(
     res.cookie("jwtToken", req.user.token, {
       httpOnly: false,
       secure: true,
-      sameSite: "strict",
+      sameSite: "none",
     });
     res.redirect(process.env.CLIENT_URL);
   }

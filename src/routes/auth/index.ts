@@ -29,6 +29,8 @@ const verifyToken = (token) => {
 
 const isLoggedIn = (req, res, next) => {
   console.log("Checking if logged in...");
+  console.log("Req user");
+  console.log(req.user);
 
   console.log("bearer");
   console.log(req.headers.authorization);
@@ -51,6 +53,14 @@ const isLoggedIn = (req, res, next) => {
     token = authorizationHeader;
   }
 
+  if (!token) {
+    console.log("Failed authentication");
+    res.status(401).json({
+      error: true,
+      message: "Failed Authentication",
+    });
+    return;
+  }
   const decodedToken: any = verifyToken(token);
   if (decodedToken) {
     // Token is valid, access the decoded payload
@@ -93,6 +103,7 @@ router.route("/google/callback").get(
     console.log("Google Callback");
     console.log(req.user);
     res.cookie("jwtToken", req.user.token, {
+      domain: "onrender.com",
       httpOnly: false,
       secure: true,
       sameSite: "none",
@@ -100,6 +111,12 @@ router.route("/google/callback").get(
     res.redirect(process.env.CLIENT_URL);
   }
 );
+
+router.route("/auth/login/initialize").post((req: any, res) => {
+  const token = "hi";
+  console.log(token);
+  res.json({ token }); // Send the generated token back to the frontend
+});
 
 router.route("/login/failed").get((req, res) => {
   res.status(401).json({
@@ -111,6 +128,8 @@ router.route("/login/failed").get((req, res) => {
 router.route("/logout").get((req: any, res, next) => {
   console.log("Logout");
   req.logout();
+  //expire the token
+  res.clearCookie("jwtToken");
   res.redirect(process.env.CLIENT_URL);
 });
 

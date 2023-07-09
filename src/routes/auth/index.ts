@@ -29,6 +29,8 @@ const verifyToken = (token) => {
 
 const isLoggedIn = (req, res, next) => {
   console.log("Checking if logged in...");
+  console.log("Cookies");
+  console.log(req.cookies);
   console.log("Req user");
   console.log(req.user);
 
@@ -53,14 +55,15 @@ const isLoggedIn = (req, res, next) => {
     token = authorizationHeader;
   }
 
-  if (!token) {
+  if (!token || token === "undefined") {
     console.log("Failed authentication");
     res.status(401).json({
       error: true,
-      message: "Failed Authentication",
+      message: "Failed Authentication: Value of token cannot be undefined!",
     });
     return;
   }
+
   const decodedToken: any = verifyToken(token);
   if (decodedToken) {
     // Token is valid, access the decoded payload
@@ -81,6 +84,7 @@ const isLoggedIn = (req, res, next) => {
 
 router.route("/login/success").post(isLoggedIn, function (req: any, res) {
   console.log("Authorizing login...");
+
   console.log(req.decodedToken);
   console.log("Login Success");
 
@@ -102,21 +106,16 @@ router.route("/google/callback").get(
   function (req: any, res) {
     console.log("Google Callback");
     console.log(req.user);
-    res.cookie("jwtToken", req.user.token, {
-      domain: ".online",
+    const token = req.user.token;
+    res.cookie("jwtToken", token, {
+      domain: "chadxgpt.online",
       httpOnly: false,
       secure: true,
       sameSite: "none",
     });
-    res.redirect(process.env.CLIENT_URL);
+    res.redirect(`${process.env.CLIENT_URL}?token=${token}`);
   }
 );
-
-router.route("/auth/login/initialize").post((req: any, res) => {
-  const token = "hi";
-  console.log(token);
-  res.json({ token }); // Send the generated token back to the frontend
-});
 
 router.route("/login/failed").get((req, res) => {
   res.status(401).json({

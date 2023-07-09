@@ -21,7 +21,7 @@ const authUser = async (req, accessToken, refreshToken, profile, done) => {
   };
 
   const token = jwt.sign(jwtPayload, process.env.JWT_SECRET, {
-    expiresIn: "1h",
+    expiresIn: "1d",
   });
   console.log("User Profile and token");
   console.log(userProfile);

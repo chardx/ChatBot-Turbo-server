@@ -103,7 +103,7 @@ router.route("/google/callback").get(
     console.log("Google Callback");
     console.log(req.user);
     res.cookie("jwtToken", req.user.token, {
-      domain: "onrender.com",
+      domain: "chadxgpt.online",
       httpOnly: false,
       secure: true,
       sameSite: "none",

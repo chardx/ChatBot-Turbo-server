@@ -31,13 +31,18 @@ const huggingfaceModel = [
   },
 
   {
-    modelName: "Kawai Diffusion v4-charm LTS",
+    modelName: "Kawai Diffusion v4-charm LTS", //best
     endpointUrl:
       "https://api-inference.huggingface.co/models/Ojimi/anime-kawai-diffusion",
   },
+  {
+    modelName: "Stable Diffusion rev-anim",
+    endpointUrl:
+      "https://api-inference.huggingface.co/models/stablediffusionapi/rev-anim",
+  },
 ];
 
-const API_URL = huggingfaceModel[5].endpointUrl;
+const API_URL = huggingfaceModel[6].endpointUrl;
 
 router.route("/").post(async (req, res) => {
   const { prompt: input } = req.body;

@@ -105,10 +105,10 @@ app.use("/api/awspolly", ttsPollyRoutes);
 app.use("/auth", authenticationRoutes);
 
 app.get("/", async (req, res) => {
-  res.write("<h1>Hello World!</h1>");
-  res.write("Wait I am thinking!\n");
-  const result = await runScript();
-  res.write("Good company name would be :" + result);
+  res.write("<h1>Welcome to Chad GPT backend</h1>");
+
+  res.write("Server status is up and running!<br><br>");
+  res.write("Date and Time update: " + new Date());
   res.send();
 });
 

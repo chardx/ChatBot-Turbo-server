@@ -108,6 +108,7 @@ app.get("/", async (req, res) => {
   res.write("<h1>Welcome to Chad GPT backend</h1>");
 
   res.write("Server status is up and running!<br><br>");
+  console.log("Server accessed last " + new Date());
   res.write("Date and Time update: " + new Date());
   res.send();
 });

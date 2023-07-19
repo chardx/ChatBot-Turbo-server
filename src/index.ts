@@ -10,6 +10,7 @@ import huggingFaceRoutes from "./routes/huggingface.route.js";
 import describeImageRoutes from "./routes/describeimage.route.js";
 import fileUploaderRoutes from "./routes/file-uploader/index.js";
 import ttsPollyRoutes from "./routes/awspolly.route.js";
+import getCurrentWeatherRoutes from "./routes/getCurrentWeather.route.js";
 import authenticationRoutes from "./routes/auth/index.js";
 
 //Google Auth
@@ -100,6 +101,7 @@ app.use("/api/fileuploader", fileUploaderRoutes);
 app.use("/api/huggingface", huggingFaceRoutes);
 app.use("/api/describeImage", describeImageRoutes);
 app.use("/api/awspolly", ttsPollyRoutes);
+app.use("/api/getCurrentWeather", getCurrentWeatherRoutes);
 
 //Google Auth
 app.use("/auth", authenticationRoutes);

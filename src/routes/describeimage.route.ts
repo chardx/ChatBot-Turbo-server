@@ -33,17 +33,17 @@ const runDescribeImage = async (req: any, imageUrl: Blob | any) => {
       model: "nlpconnect/vit-gpt2-image-captioning",
     });
 
+    const generatedText = results.generated_text;
     console.log(results.generated_text);
 
-    const response = await chat.call([
-      new SystemChatMessage(`
-      Act like you're a bot that that explain a description of an image further but in full details but still stay with the context of the given description. No introduction and side comments. Just provide your observation.
-      `),
-      new HumanChatMessage(results.generated_text),
-    ]);
+    // const response = await chat.call([
+    //   new SystemChatMessage(`
+    //   Act like you're a bot that that explain a description of an image further but in full details but still stay with the context of the given description. No introduction and side comments. Just provide your observation.
+    //   `),
+    //   new HumanChatMessage(results.generated_text),
+    // ]);
 
-    console.log(response);
-    return response;
+    return generatedText;
   } catch (error) {
     console.log(error);
   }

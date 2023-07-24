@@ -34,6 +34,7 @@ const runDescribeImage = async (req: any, imageUrl: Blob | any) => {
     });
 
     const generatedText = results.generated_text;
+    console.log("Generated Text");
     console.log(results.generated_text);
 
     // const response = await chat.call([

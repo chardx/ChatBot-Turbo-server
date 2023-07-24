@@ -33,7 +33,10 @@ const runGetCurrentWeather = async (req: any, options: any) => {
     let result = `Weather for ${data.resolvedAddress} - ${data.description}\n`;
 
     for (let day of data.days) {
-      result += `On ${day.datetime}, max temp: ${day.tempmax}, min temp: ${day.tempmin}, condition: ${day.conditions}\n`;
+      const currentTempInCelcius = convertFahrenheitToCelsius(day.temp);
+      const tempMaxInCelcius = convertFahrenheitToCelsius(day.tempmax);
+      const tempMinInCelcius = convertFahrenheitToCelsius(day.tempmin);
+      result += `On ${day.datetime}, temp: ${currentTempInCelcius}, max temp: ${tempMaxInCelcius}, min temp: ${tempMinInCelcius}, condition: ${day.conditions}\n`;
     }
     console.log(result);
     return result;
@@ -41,6 +44,11 @@ const runGetCurrentWeather = async (req: any, options: any) => {
     console.error(`Error fetching weather data:`, error);
     throw error;
   }
+};
+
+const convertFahrenheitToCelsius = (fahrenheit: any) => {
+  let celsius = ((fahrenheit - 32) * 5) / 9;
+  return celsius.toFixed(2);
 };
 
 export default router;

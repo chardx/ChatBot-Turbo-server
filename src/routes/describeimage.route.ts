@@ -27,10 +27,12 @@ const runDescribeImage = async (req: any, imageUrl: Blob | any) => {
   const response = await fetch(imageUrl);
   const imageBlob = await response.blob();
 
+  //List of Image to Text Models
+  // nlpconnect/vit-gpt2-image-captioning",  //Salesforce/blip-image-captioning-large
   try {
     const results = await hf.imageToText({
       data: imageBlob,
-      model: "nlpconnect/vit-gpt2-image-captioning",
+      model: "Salesforce/blip-image-captioning-large", //Salesforce/blip-image-captioning-large
     });
 
     const generatedText = results.generated_text;

@@ -12,6 +12,7 @@ import fileUploaderRoutes from "./routes/file-uploader/index.js";
 import ttsPollyRoutes from "./routes/awspolly.route.js";
 import getCurrentWeatherRoutes from "./routes/getCurrentWeather.route.js";
 import uploadImageRoutes from "./routes/uploadImage.route.js";
+import objectDetectionRoutes from "./routes/objectDetection.route.js";
 import authenticationRoutes from "./routes/auth/index.js";
 
 //Google Auth
@@ -104,7 +105,7 @@ app.use("/api/describeImage", describeImageRoutes);
 app.use("/api/awspolly", ttsPollyRoutes);
 app.use("/api/getCurrentWeather", getCurrentWeatherRoutes);
 app.use("/api/uploadImage", uploadImageRoutes);
-
+app.use("/api/objectDetection", objectDetectionRoutes);
 
 //Google Auth
 app.use("/auth", authenticationRoutes);

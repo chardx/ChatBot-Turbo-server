@@ -40,6 +40,16 @@ const huggingfaceModel = [
     endpointUrl:
       "https://api-inference.huggingface.co/models/stablediffusionapi/rev-anim",
   },
+  {
+    modelName: "Stable Diffusion xl base 1.0",
+    endpointUrl:
+      "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-0.9",
+  },
+  {
+    modelName: "Digiplay lewd fantasy",
+    endpointUrl:
+      "https://api-inference.huggingface.co/models/digiplay/perfectLewdFantasy_v1.01",
+  },
 ];
 
 const API_URL = huggingfaceModel[6].endpointUrl;
@@ -70,7 +80,6 @@ const runProcessImage = async (req: any, input: string) => {
     // console.log("Hey I was executed");
     // console.log(URL.createObjectURL(blob));
     // return `${URL.createObjectURL(blob)}`;
-
     const buffer = await response.arrayBuffer();
     const base64Image = Buffer.from(buffer).toString("base64");
     // console.log(`data:image/jpeg;base64,${base64Image}`);

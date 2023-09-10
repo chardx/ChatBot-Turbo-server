@@ -5,6 +5,7 @@ import stableDRoutes from "./routes/stablediffusion.route.js";
 import stableDummy from "./routes/stableD.route.js";
 import generateTitle from "./routes/chatTitle.route.js";
 import firebaseRoutes from "./routes/firebase.route.js";
+import firebaseAICreationRoutes from "./routes/firebaseAICreation.route.js";
 import documentLoaderRoutes from "./routes/document-loader/index.js";
 import huggingFaceRoutes from "./routes/huggingface.route.js";
 import describeImageRoutes from "./routes/describeimage.route.js";
@@ -68,7 +69,7 @@ app.use(
   cookieSession({
     name: "ChatBotTurboSession",
     keys: process.env.COOKIE_SESSION_SECRET.split(","),
-    maxAge: 24 * 60 * 60 * 1000,
+    maxAge: 14 * 24 * 60 * 60 * 1000,
     cookie: {
       domain: "chadxgpt.online",
       secure: process.env.NODE_ENV === "production",
@@ -101,6 +102,7 @@ app.use("/api/stableD", stableDRoutes);
 app.use("/api/stableDummy", stableDummy);
 app.use("/api/generateTitle", generateTitle);
 app.use("/api/firebase", firebaseRoutes);
+app.use("/api/firebaseAI", firebaseAICreationRoutes);
 app.use("/api/documentLoader", documentLoaderRoutes);
 app.use("/api/fileuploader", fileUploaderRoutes);
 app.use("/api/huggingface", huggingFaceRoutes);

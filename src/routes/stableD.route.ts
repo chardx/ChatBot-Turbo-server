@@ -75,14 +75,9 @@ const runProcessImage = async (req: any, input: string) => {
       },
       body: JSON.stringify(input),
     });
-    // const blob = await response.blob();
-    // console.log(blob);
-    // console.log("Hey I was executed");
-    // console.log(URL.createObjectURL(blob));
-    // return `${URL.createObjectURL(blob)}`;
     const buffer = await response.arrayBuffer();
     const base64Image = Buffer.from(buffer).toString("base64");
-    // console.log(`data:image/jpeg;base64,${base64Image}`);
+
     //Upload Image to Cloudinary
     const urlResult = await uploadImage(
       `data:image/jpeg;base64,${base64Image}`

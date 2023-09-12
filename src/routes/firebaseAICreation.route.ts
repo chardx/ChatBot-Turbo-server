@@ -5,34 +5,26 @@ import admin from "firebase-admin";
 const router = express.Router();
 
 router.route("/").get(async (req, res) => {
-  const { userID } = req.query;
-
   try {
-    const conversationRef = adminDb.collection("ai");
+    const aiListRef = adminDb.collection("ai");
     // const querySnapshot = await usersRef.where("googleId", "==", googleId).get();
-
-    const snapshot = await conversationRef
-      .where("userID", "==", userID)
-      .orderBy("dateLastUpdated", "desc")
-      .limit(10)
-      .get();
-    const conversations = [];
-
+    const listOfAllAi = [];
+    const snapshot = await aiListRef.orderBy("id", "asc").get();
     snapshot.forEach((doc) => {
-      const conversation = doc.data();
-      conversation.id = doc.id;
-
-      // Convert the "dateCreated" field from Firestore Timestamp to Javascript date
-      conversation.dateCreated = conversation.dateCreated
-        .toDate()
-        .toLocaleString();
-      conversation.dateLastUpdated = conversation.dateLastUpdated
-        .toDate()
-        .toLocaleString();
-      conversations.push(conversation);
+      const ai = doc.data();
+      const aiSort = {
+        id: ai.id,
+        aiName: ai.aiName,
+        content: ai.content,
+        description: ai.description,
+        voice: ai.voice,
+        voice11labs: ai.voice11labs,
+        picture: ai.picture,
+      };
+      listOfAllAi.push(aiSort);
     });
-
-    res.status(200).send(conversations);
+    console.log("Firebase AI Creation routes called!");
+    res.status(200).send(listOfAllAi);
   } catch (error) {
     console.log(error);
     return res.sendStatus(400);
@@ -64,7 +56,7 @@ router.route("/add").post(async (req, res) => {
   //   };
 
   try {
-    const convoRef = adminDb.collection("ai").doc(convoInput.id);
+    const convoRef = adminDb.collection("ai").doc();
     const doc = await convoRef.set(convoInput);
 
     console.log("Document written");

@@ -1,5 +1,5 @@
 {
-  "name": "",
+  "name": "ChadGPT_Turbo",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -18,9 +18,9 @@
   "bugs": "",
   "keywords": [],
   "author": {
-    "name": "",
-    "email": "",
-    "url": ""
+    "name": "Richard Roxas",
+    "email": "chardsourcex@gmail.com",
+    "url": "https://www.chadxgpt.online"
   },
   "contributors": [],
   "scripts": {

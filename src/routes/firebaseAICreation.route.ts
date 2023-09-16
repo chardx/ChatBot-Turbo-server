@@ -20,6 +20,8 @@ router.route("/").get(async (req, res) => {
         voice: ai.voice,
         voice11labs: ai.voice11labs,
         picture: ai.picture,
+        dateCreated: ai.dateCreated,
+        dateLastUpdated: ai.dateLastUpdated,
       };
       listOfAllAi.push(aiSort);
     });
@@ -45,19 +47,21 @@ router.route("/add").post(async (req, res) => {
     picture: string;
     voice: string;
     voice11labs: string;
+    dateCreated: string;
+    dateLastUpdated: string;
   }
 
   const convoInput: AI = req.body.data;
   console.log(convoInput);
-  //   const conversation = {
-  //     ...convoInput,
-  //     dateCreated: new Date(convoInput.dateCreated), // Convert dateCreated to Firestore Time stamp
-  //     dateLastUpdated: new Date(convoInput.dateLastUpdated), // Convert dateLastUpdated to Firestore Time stamp
-  //   };
+  const conversation = {
+    ...convoInput,
+    dateCreated: new Date(convoInput.dateCreated), // Convert dateCreated to Firestore Time stamp
+    dateLastUpdated: new Date(convoInput.dateLastUpdated), // Convert dateLastUpdated to Firestore Time stamp
+  };
 
   try {
     const convoRef = adminDb.collection("ai").doc();
-    const doc = await convoRef.set(convoInput);
+    await convoRef.set(conversation);
 
     console.log("Document written");
     res.status(200).send("Document added Successfully!");

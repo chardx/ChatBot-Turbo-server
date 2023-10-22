@@ -1,6 +1,5 @@
 import express from "express";
 import { ChatOpenAI } from "langchain/chat_models/openai";
-import { HumanChatMessage, SystemChatMessage } from "langchain/schema";
 const router = express.Router();
 import { HfInference } from "@huggingface/inference";
 const chat = new ChatOpenAI({ temperature: 0 });
@@ -22,20 +21,23 @@ router.route("/").post(async (req, res) => {
 const runDescribeImage = async (req, imageUrl) => {
     const response = await fetch(imageUrl);
     const imageBlob = await response.blob();
+    //List of Image to Text Models
+    // nlpconnect/vit-gpt2-image-captioning",  //Salesforce/blip-image-captioning-large
     try {
         const results = await hf.imageToText({
             data: imageBlob,
-            model: "nlpconnect/vit-gpt2-image-captioning",
+            model: "Salesforce/blip-image-captioning-large", //Salesforce/blip-image-captioning-large
         });
+        const generatedText = results.generated_text;
+        console.log("Generated Text");
         console.log(results.generated_text);
-        const response = await chat.call([
-            new SystemChatMessage(`
-      Act like you're a bot that that explain a description of an image further but in full details but still stay with the context of the given description. No introduction and side comments. Just provide your observation.
-      `),
-            new HumanChatMessage(results.generated_text),
-        ]);
-        console.log(response);
-        return response;
+        // const response = await chat.call([
+        //   new SystemChatMessage(`
+        //   Act like you're a bot that that explain a description of an image further but in full details but still stay with the context of the given description. No introduction and side comments. Just provide your observation.
+        //   `),
+        //   new HumanChatMessage(results.generated_text),
+        // ]);
+        return generatedText;
     }
     catch (error) {
         console.log(error);

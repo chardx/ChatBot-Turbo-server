@@ -1,16 +1,22 @@
 import express from "express";
-import { runScript } from "./app.js";
 import googleRoutes from "./routes/google.route.js";
 import stableDRoutes from "./routes/stablediffusion.route.js";
 import stableDummy from "./routes/stableD.route.js";
 import generateTitle from "./routes/chatTitle.route.js";
 import firebaseRoutes from "./routes/firebase.route.js";
+import firebaseAICreationRoutes from "./routes/firebaseAICreation.route.js";
 import documentLoaderRoutes from "./routes/document-loader/index.js";
 import huggingFaceRoutes from "./routes/huggingface.route.js";
 import describeImageRoutes from "./routes/describeimage.route.js";
 import fileUploaderRoutes from "./routes/file-uploader/index.js";
 import ttsPollyRoutes from "./routes/awspolly.route.js";
+import getCurrentWeatherRoutes from "./routes/getCurrentWeather.route.js";
+import uploadImageRoutes from "./routes/uploadImage.route.js";
+import objectDetectionRoutes from "./routes/objectDetection.route.js";
 import authenticationRoutes from "./routes/auth/index.js";
+import createPineconeRoutes from "./routes/pinecone/createPinecone.route.js";
+import updatePineconeRoutes from "./routes/pinecone/updatePinecone.route.js";
+import askPineconeRoutes from "./routes/pinecone/askPinecone.route.js";
 //Google Auth
 import passport from "passport";
 import cookieSession from "cookie-session";
@@ -29,24 +35,36 @@ const corsOptions = {
         "x-client-token",
         "x-client-secret",
         "Authorization",
+        "Set-Cookie",
     ],
     credentials: true,
 };
 app.use(cors(corsOptions));
-app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", process.env.CLIENT_URL || "http://localhost:5173");
-    res.header("Access-Control-Allow-Credentials", "true");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-});
+// app.use(function (req, res, next) {
+//   res.header(
+//     "Access-Control-Allow-Origin",
+//     process.env.CLIENT_URL || "http://localhost:5173"
+//   );
+//   res.header("Access-Control-Allow-Credentials", "true");
+//   res.header(
+//     "Access-Control-Allow-Headers",
+//     "Origin, X-Requested-With, Content-Type, Accept"
+//   );
+//   next();
+// });
+if (process.env.NODE_ENV === "production") {
+    app.set("trust proxy", 1);
+}
+// app.set("trust proxy", 1); // trust first proxy
 app.use(cookieSession({
-    name: "session",
-    keys: ["cyberwolve"],
-    maxAge: 24 * 60 * 60 * 100,
+    name: "ChatBotTurboSession",
+    keys: process.env.COOKIE_SESSION_SECRET.split(","),
+    maxAge: 14 * 24 * 60 * 60 * 1000,
     cookie: {
-        sameSite: 'lax',
-        secure: process.env.NODE_ENV === "production", // Set to true if your application is served over HTTPS
-
+        domain: "chadxgpt.online",
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "none",
+        httpOnly: true,
     },
 }));
 // app.set("trust proxy", 1);
@@ -55,7 +73,11 @@ app.use(cookieSession({
 //     secret: "ChaD Software Development",
 //     resave: false,
 //     saveUninitialized: false,
-//     secure: process.env.NODE_ENV === "production",
+//     cookie: {
+//       secure: process.env.NODE_ENV === "production",
+//       httpOnly: true,
+//       domain: process.env.NODE_ENV === "production" ? "onrender.com" : "",
+//     },
 //   })
 // );
 app.use(passport.initialize());
@@ -66,41 +88,25 @@ app.use("/api/stableD", stableDRoutes);
 app.use("/api/stableDummy", stableDummy);
 app.use("/api/generateTitle", generateTitle);
 app.use("/api/firebase", firebaseRoutes);
+app.use("/api/firebaseAI", firebaseAICreationRoutes);
 app.use("/api/documentLoader", documentLoaderRoutes);
 app.use("/api/fileuploader", fileUploaderRoutes);
 app.use("/api/huggingface", huggingFaceRoutes);
 app.use("/api/describeImage", describeImageRoutes);
 app.use("/api/awspolly", ttsPollyRoutes);
-//console.log() values of "req.session" and "req.user" so we can see what is happening during Google Authentication
-// let count = 1;
-// const showlogs = (req, res, next) => {
-//     console.log("\n==============================");
-//     console.log(`------------>  ${count++}`);
-//     console.log(`\n req.session.passport -------> `);
-//     console.log(req.session.passport);
-//     console.log(`\n req.user -------> `);
-//     console.log(req.user);
-//     console.log("\n Session and Cookie");
-//     console.log(`req.session.id -------> ${req.session.id}`);
-//     console.log(`req.session.cookie -------> `);
-//     console.log(req.session.cookie);
-//     console.log("===========================================\n");
-//     next();
-// };
-// app.use(showlogs);
+app.use("/api/getCurrentWeather", getCurrentWeatherRoutes);
+app.use("/api/uploadImage", uploadImageRoutes);
+app.use("/api/objectDetection", objectDetectionRoutes);
+app.use("/api/createPinecone", createPineconeRoutes);
+app.use("/api/updatePinecone", updatePineconeRoutes);
+app.use("/api/askPinecone", askPineconeRoutes);
 //Google Auth
 app.use("/auth", authenticationRoutes);
-// app.use(
-//   "/auth",
-//   passport.initialize(),
-//   passport.session(),
-//   authenticationRoutes
-// );
 app.get("/", async (req, res) => {
-    res.write("<h1>Hello World!</h1>");
-    res.write("Wait I am thinking!\n");
-    const result = await runScript();
-    res.write("Good company name would be :" + result);
+    res.write("<h1>Welcome to Chad GPT backend</h1>");
+    res.write("Server status is up and running!<br><br>");
+    console.log("Server accessed last " + new Date());
+    res.write("Date and Time update: " + new Date());
     res.send();
 });
 const port = process.env.PORT || 3000;

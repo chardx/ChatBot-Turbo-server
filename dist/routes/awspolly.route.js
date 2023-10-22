@@ -3,6 +3,7 @@ import * as dotenv from "dotenv";
 import { Readable } from "stream";
 import fs from "fs";
 import { SynthesizeSpeechCommand, PollyClient } from "@aws-sdk/client-polly";
+import { Polly, DescribeVoicesCommand } from "@aws-sdk/client-polly";
 dotenv.config();
 const router = express.Router();
 const creds = {
@@ -25,6 +26,14 @@ router.route("/").post(async (req, res) => {
         console.log(error);
         res.status(500).json({ error: "Internal server error." });
     }
+});
+router.route("/getVoices").get(async (req, res) => {
+    try {
+        const awsAllVoices = await getAllVoices();
+        console.log(awsAllVoices);
+        res.status(200).send(awsAllVoices);
+    }
+    catch (error) { }
 });
 export const processTextToSpeech = async (req, res) => {
     const { message: textStream, activeVoice } = req.body;
@@ -54,6 +63,19 @@ export const processTextToSpeech = async (req, res) => {
     catch (err) {
         console.log(err);
         res.status(500).json({ error: "Internal server error." });
+    }
+};
+const getAllVoices = async () => {
+    const client = new Polly({ region: "us-west-2", credentials: creds });
+    try {
+        const data = await client.send(new DescribeVoicesCommand({}));
+        const voices = data.Voices.filter((voice) => voice.SupportedEngines[0] === "neural" &&
+            voice.LanguageCode.slice(0, 2) === "en");
+        return voices;
+    }
+    catch (error) {
+        console.error("Error getting voices:", error);
+        throw error;
     }
 };
 export default router;

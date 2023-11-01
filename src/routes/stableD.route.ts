@@ -43,17 +43,23 @@ const huggingfaceModel = [
   {
     modelName: "Stable Diffusion xl base 1.0",
     endpointUrl:
-      "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-0.9",
+      "https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-xl-base-1.0",
   },
   {
     modelName: "Digiplay lewd fantasy",
     endpointUrl:
       "https://api-inference.huggingface.co/models/digiplay/perfectLewdFantasy_v1.01",
   },
+  {
+    modelName: "Segmind Stable Diffusion",
+    endpointUrl: "https://api-inference.huggingface.co/models/segmind/SSD-1B",
+  },
 ];
 
-const API_URL = huggingfaceModel[6].endpointUrl;
-
+const API_URL = huggingfaceModel.find(
+  (model) => model.modelName === "Stable Diffusion xl base 1.0"
+).endpointUrl;
+console.log(API_URL);
 router.route("/").post(async (req, res) => {
   const { prompt: input } = req.body;
   try {

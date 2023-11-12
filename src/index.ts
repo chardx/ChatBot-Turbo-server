@@ -8,7 +8,7 @@ import firebaseRoutes from "./routes/firebase.route.js";
 import firebaseAICreationRoutes from "./routes/firebaseAICreation.route.js";
 import documentLoaderRoutes from "./routes/document-loader/index.js";
 import huggingFaceRoutes from "./routes/huggingface.route.js";
-import describeImageRoutes from "./routes/describeimage.route.js";
+import describeImageRoutes from "./routes/describeImageGpt4Vision.route.js";
 import fileUploaderRoutes from "./routes/file-uploader/index.js";
 import ttsPollyRoutes from "./routes/awspolly.route.js";
 import getCurrentWeatherRoutes from "./routes/getCurrentWeather.route.js";

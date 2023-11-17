@@ -18,6 +18,7 @@ import authenticationRoutes from "./routes/auth/index.js";
 import createPineconeRoutes from "./routes/pinecone/createPinecone.route.js";
 import updatePineconeRoutes from "./routes/pinecone/updatePinecone.route.js";
 import askPineconeRoutes from "./routes/pinecone/askPinecone.route.js";
+import textToImageRoutes from "./routes/textToImage.route.js";
 
 //Google Auth
 import passport from "passport";
@@ -114,6 +115,7 @@ app.use("/api/objectDetection", objectDetectionRoutes);
 app.use("/api/createPinecone", createPineconeRoutes);
 app.use("/api/updatePinecone", updatePineconeRoutes);
 app.use("/api/askPinecone", askPineconeRoutes);
+app.use("/api/textToImage", textToImageRoutes);
 
 //Google Auth
 app.use("/auth", authenticationRoutes);

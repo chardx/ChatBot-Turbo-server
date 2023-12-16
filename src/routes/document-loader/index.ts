@@ -19,7 +19,8 @@ let docs;
 let vectorStore;
 
 //  load documents from the specified directory. This function runs directoryLoader and updateVectorStore
-[docs, vectorStore] = await updateVectorStore(docs, vectorStore);
+//**** IMPORTANT !! ENABLE THIS CODE TO ACTIVATE LOAD FROM DOCUMENTS FUNCTION */
+// [docs, vectorStore] = await updateVectorStore(docs, vectorStore);
 
 const router = express.Router();
 

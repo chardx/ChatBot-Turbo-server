@@ -19,6 +19,7 @@ import createPineconeRoutes from "./routes/pinecone/createPinecone.route.js";
 import updatePineconeRoutes from "./routes/pinecone/updatePinecone.route.js";
 import askPineconeRoutes from "./routes/pinecone/askPinecone.route.js";
 import textToImageRoutes from "./routes/textToImage.route.js";
+import geminiProRoutes from "./routes/geminiPro.route.js";
 
 //Google Auth
 import passport from "passport";
@@ -116,6 +117,7 @@ app.use("/api/createPinecone", createPineconeRoutes);
 app.use("/api/updatePinecone", updatePineconeRoutes);
 app.use("/api/askPinecone", askPineconeRoutes);
 app.use("/api/textToImage", textToImageRoutes);
+app.use("/api/geminipro", geminiProRoutes);
 
 //Google Auth
 app.use("/auth", authenticationRoutes);

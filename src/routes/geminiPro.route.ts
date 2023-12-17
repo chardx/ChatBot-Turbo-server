@@ -2,7 +2,7 @@ import express from "express";
 
 const router = express.Router();
 import { GoogleGenerativeAI } from "@google/generative-ai";
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_PRO_API_KEY);
+const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
 
 router.route("/").post(async (req, res) => {
   const { chatMessages, activeAI } = req.body;

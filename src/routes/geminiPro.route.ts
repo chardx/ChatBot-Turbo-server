@@ -68,6 +68,8 @@ const runGeminiPro = async (req, chatMessages, activeAI, chunkCallback) => {
     const chunkText = chunk.text();
     if (!chunkText) {
       console.log("BLANK DETECTED!");
+      console.log(chunk.candidates[0].finishReason);
+      console.log(chunk.candidates[0].safetyRatings);
       return;
     }
     console.log(chunkText);

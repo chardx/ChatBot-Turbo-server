@@ -16,6 +16,8 @@ export const authenticateFirebaseUser = async ({ profile, googleId }) => {
       user: foundUser.data.displayName,
       picture: foundUser.data.profilePicture,
       email: foundUser.data.email,
+      subscription: foundUser.data.subscription,
+      selectedLLM: foundUser.data.selectedLLM,
     };
   } else {
     //If User not found, Register the user in Firestore
@@ -26,6 +28,8 @@ export const authenticateFirebaseUser = async ({ profile, googleId }) => {
         displayName: profile.displayName,
         profilePicture: profile.photos[0].value,
         email: profile.emails[0].value,
+        subscription: "free",
+        selectedLLM: "gemini",
       });
 
       return {
@@ -34,6 +38,8 @@ export const authenticateFirebaseUser = async ({ profile, googleId }) => {
         user: profile.displayName,
         picture: profile.photos[0].value,
         email: profile.emails[0].value,
+        subscription: "free",
+        selectedLLM: "gemini",
       };
     } catch (error) {
       console.log(error);

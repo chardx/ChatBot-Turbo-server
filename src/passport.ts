@@ -18,6 +18,8 @@ const authUser = async (req, accessToken, refreshToken, profile, done) => {
     user: userProfile.user,
     picture: userProfile.picture,
     email: userProfile.email,
+    subscription: userProfile.subscription,
+    selectedLLM: userProfile.selectedLLM,
   };
 
   const token = jwt.sign(jwtPayload, process.env.JWT_SECRET, {

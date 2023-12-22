@@ -68,10 +68,13 @@ const isLoggedIn = (req, res, next) => {
   if (decodedToken) {
     // Token is valid, access the decoded payload
     req.decodedToken = decodedToken;
+    console.log(decodedToken);
     console.log("User ID:", decodedToken.userID);
     console.log("Google ID:", decodedToken.googleId);
     console.log("User :", decodedToken.user);
     console.log("Email:", decodedToken.email);
+    console.log("Subscription :", decodedToken.subscription);
+    console.log("Selected LLM:", decodedToken.selectedLLM);
     next();
   } else {
     // Token is invalid

@@ -9,7 +9,7 @@ const authUser = async (req, accessToken, refreshToken, profile, done) => {
     googleId: profile.id,
   });
   console.log("User Profile:");
-  // console.log(userProfile);
+  console.log(userProfile);
 
   //JWT implementation
   const jwtPayload = {

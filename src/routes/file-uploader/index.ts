@@ -54,6 +54,7 @@ router
             return res.status(500).json({ status: "error", message: err });
         });
       });
+      console.log("Upload success!!");
 
       return res.json({
         status: "success",

@@ -29,6 +29,8 @@ const runWhisperTranscribe = async (req: Request) => {
     model: "whisper-1",
   });
   console.log(translation.text);
+  //Deleting file synchronously
+  fs.unlinkSync(mp3File);
   return translation.text;
 };
 

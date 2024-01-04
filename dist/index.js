@@ -7,7 +7,7 @@ import firebaseRoutes from "./routes/firebase.route.js";
 import firebaseAICreationRoutes from "./routes/firebaseAICreation.route.js";
 import documentLoaderRoutes from "./routes/document-loader/index.js";
 import huggingFaceRoutes from "./routes/huggingface.route.js";
-import describeImageRoutes from "./routes/describeimage.route.js";
+import describeImageRoutes from "./routes/describeImageGpt4Vision.route.js";
 import fileUploaderRoutes from "./routes/file-uploader/index.js";
 import ttsPollyRoutes from "./routes/awspolly.route.js";
 import getCurrentWeatherRoutes from "./routes/getCurrentWeather.route.js";
@@ -17,6 +17,9 @@ import authenticationRoutes from "./routes/auth/index.js";
 import createPineconeRoutes from "./routes/pinecone/createPinecone.route.js";
 import updatePineconeRoutes from "./routes/pinecone/updatePinecone.route.js";
 import askPineconeRoutes from "./routes/pinecone/askPinecone.route.js";
+import textToImageRoutes from "./routes/textToImage.route.js";
+import geminiProRoutes from "./routes/geminiPro.route.js";
+import whisperRoutes from "./routes/whisperTranscribe.route.js";
 //Google Auth
 import passport from "passport";
 import cookieSession from "cookie-session";
@@ -100,6 +103,9 @@ app.use("/api/objectDetection", objectDetectionRoutes);
 app.use("/api/createPinecone", createPineconeRoutes);
 app.use("/api/updatePinecone", updatePineconeRoutes);
 app.use("/api/askPinecone", askPineconeRoutes);
+app.use("/api/textToImage", textToImageRoutes);
+app.use("/api/geminipro", geminiProRoutes);
+app.use("/api/whisperTranscribe", whisperRoutes);
 //Google Auth
 app.use("/auth", authenticationRoutes);
 app.get("/", async (req, res) => {

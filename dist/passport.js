@@ -8,7 +8,7 @@ const authUser = async (req, accessToken, refreshToken, profile, done) => {
         googleId: profile.id,
     });
     console.log("User Profile:");
-    // console.log(userProfile);
+    console.log(userProfile);
     //JWT implementation
     const jwtPayload = {
         userID: userProfile.userID,
@@ -16,6 +16,8 @@ const authUser = async (req, accessToken, refreshToken, profile, done) => {
         user: userProfile.user,
         picture: userProfile.picture,
         email: userProfile.email,
+        subscription: userProfile.subscription,
+        selectedLLM: userProfile.selectedLLM,
     };
     const token = jwt.sign(jwtPayload, process.env.JWT_SECRET, {
         expiresIn: "1d",

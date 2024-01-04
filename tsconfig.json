@@ -7,7 +7,9 @@
     "outDir": "dist",
     "resolveJsonModule": true,
     "typeRoots": ["./typings"],
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
   },
   "include": ["src/**/*", "typings.d.ts"]
 }

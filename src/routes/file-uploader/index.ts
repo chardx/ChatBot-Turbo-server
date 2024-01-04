@@ -24,19 +24,31 @@ router
   .post(
     fileUpload({ createParentPath: true }),
     filesPayloadExists,
-    fileExtLimiter([".png", ".jpg", ".jpeg", ".pdf", ".txt", ".csv", ".json"]),
+    fileExtLimiter([
+      ".png",
+      ".jpg",
+      ".jpeg",
+      ".pdf",
+      ".txt",
+      ".csv",
+      ".json",
+      ".mp3",
+    ]),
     fileSizeLimiter,
     async (req: any, res) => {
       const files = req.files;
       console.log(files);
 
       Object.keys(files).forEach((key) => {
+        let directoryPath = "document-loader/documents";
+        let fileName = files[key].name;
+        if (files[key].mimetype === "audio/mpeg") {
+          // Store mp3 file to different directory
+          directoryPath = "audioToTranscribe/";
+          fileName = "index.mp3"; // Default mp3 file
+        }
         const parentPath = path.resolve(__dirname, "..");
-        const filepath = join(
-          parentPath,
-          "document-loader/documents",
-          files[key].name
-        );
+        const filepath = join(parentPath, directoryPath, fileName);
         files[key].mv(filepath, (err) => {
           if (err)
             return res.status(500).json({ status: "error", message: err });
